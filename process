@@ -1,0 +1,11 @@
+newcodersurvey2017 <- read_csv("~/Documents/Working-Directory/new coder survey 2017/2017-fCC-New-Coders-Survey-Data.csv")
+bootcampers2017 <- newcodersurvey2017[(newcodersurvey2017$AttendedBootcamp) == 1,]
+bootcampers2017 <- bootcampers2017[!is.na(bootcampers2017$AttendedBootcamp),]
+bootcampers2017 <- bootcampers2017[!is.na(bootcampers2017$BootcampName),]
+bootcampers2017 <- bootcampers2017[!grepl("Free Code Camp", bootcampers2017$BootcampName),]
+library(plyr)
+bootcamps <- count (bootcampers2017, vars = "BootcampName")
+bootcamprec <- bootcampers2017[!is.na(bootcampers2017$BootcampRecommend),]
+bootcamps <- ddply(bootcamprec, .(BootcampName), function(x) mean(x$BootcampRecommend))
+bootcampfreq <- count (bootcamprec, vars = "BootcampName")
+bootcamps <- cbind (bootcamps, bootcampfreq$freq)
